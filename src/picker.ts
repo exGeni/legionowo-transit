@@ -107,7 +107,7 @@ export function picker(
     list,
     h('p', { class: 'fine' },
       'Bez konta. Wybór i lokalizacja zostają w telefonie. Mapa pochodzi z serwerów OpenStreetMap, a strona z GitHub: te serwery widzą Twój adres IP i oglądany fragment mapy.'),
-    h('p', { class: 'fine' }, 'Nie każdy przystanek ma jeszcze punkt na mapie: wszystkie są na liście. Trasa D5E nie jest jeszcze narysowana.'),
+    h('p', { class: 'fine' }, 'Nie każdy przystanek ma jeszcze punkt na mapie: wszystkie są na liście. Trasy D5E i objazdu D4 wyznaczył program według kolejności przystanków.'),
     h('p', { class: 'fine' }, 'Dodaj do ekranu telefonu. iPhone: „Udostępnij”, potem „Do ekranu początkowego”. Android: menu przeglądarki, potem „Zainstaluj aplikację”.'),
   );
 

@@ -18,9 +18,12 @@ where the bus really is.
 ## What it does and does not do
 
 - All stops of the five lines in a searchable list, with the nearest ones first.
-- A map with the D1-D4 paths. Only stops whose position could be checked have a point
-  (name and post number match OpenStreetMap, and the point is on the correct side of
-  the road). The D5E path is not drawn yet.
+- A map with all five paths. A stop has a point where its name and post number match
+  OpenStreetMap, on the line's route there or next to its neighbouring stops; the side of
+  the road is taken from the post number as mapped, not checked. The others are only in
+  the list. D5E and the D4 detour by Polna and Krakusa have no route in OpenStreetMap:
+  a router (OSRM) built them from the order of the stops.
+- On a phone one column; on a computer the choice on the left and a large map beside it.
 - Leave time = departure − your walk − 2 minutes in case the bus is early.
 - Timetable verified up to 31 December 2026. Public holidays and 31 December show
   "unconfirmed", because the town's pages give no rule for them.
@@ -42,6 +45,9 @@ To refresh after a change:
 npm run data        # reads every stop page with two independently written parsers
 node scripts/osm.mjs  # stop positions and line paths (cached in .cache/osm.json)
 ```
+
+When the D4 detour or D5E changes, also run `node scripts/route.mjs` and then
+`scripts/osm.mjs` again, and compare the result with the town's route map.
 
 Review the difference in `public/data/`, then merge. For a new validity period, first set
 `validUntil` and the dates with no rule in `src/calendar.json`.

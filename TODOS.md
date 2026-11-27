@@ -2,30 +2,6 @@
 
 ## Data and status
 
-### A maintenance page must not mark a line "changed" for good
-
-**What:** Treat a page without a timetable block or stop list as "could not check".
-**Why:** One CMS error served with HTTP 200 would warn riders of a change until someone re-publishes.
-**Context:** `scripts/lib/collect.mjs` throws `Changed` for any unreadable page; the design says such a page means "could not check". Second review round, 27.11.2026.
-**Effort:** S
-**Priority:** P1
-
-### Do not drop a direction whose heading cannot be read
-
-**What:** Fail when a stop list has two or more stops but no readable heading.
-**Why:** A changed page heading would silently remove a whole direction at the next refresh, and the check would then report the line as matching.
-**Context:** the direction filter in `scripts/lib/site.mjs`. Final review, 27.11.2026.
-**Effort:** S
-**Priority:** P1
-
-### Make the timetable renewal safe before it is due
-
-**What:** Require every public holiday up to `validUntil` in `src/calendar.json`; stop the countdown search at `validUntil`; refuse a stop page without a readable validity date.
-**Why:** The published timetable is valid to 31.12.2026, so a renewal is close. Today only 25 December is required, and a missing validity date passes.
-**Context:** `scripts/build-data.mjs`, `src/schedule.ts`. Final review, 27.11.2026.
-**Effort:** M
-**Priority:** P1
-
 ### Clear "changed" against the version it was detected on
 
 **What:** Store which published version a difference was seen against; clear when a newer one is published.
@@ -78,28 +54,12 @@
 
 ## App
 
-### Search must match while "Osiedle" is being typed
-
-**What:** Match both spellings of "Os."/"Osiedle" for partial words.
-**Why:** Typing "osied" finds nothing although "Osiedle Młodych" is on the list.
-**Context:** `plain()` in `src/platforms.ts`.
-**Effort:** S
-**Priority:** P1
-
 ### Footer must not show a comparison date from another version
 
-**What:** Pass the version-matched status to the footer; point the renewal reminder at `src/calendar.json`.
-**Why:** The footer can contradict the warning above it; the reminder names the wrong file.
+**What:** Pass the version-matched status to the footer.
+**Why:** The footer can contradict the warning above it.
 **Context:** `src/board.ts`, `scripts/lib/status.mjs`.
 **Effort:** S
-**Priority:** P2
-
-### D5E path and the remaining stop positions
-
-**What:** Draw D5E; verify the stops that have no map point.
-**Why:** 48 of 108 stops are only in the list.
-**Context:** `scripts/osm.mjs`; unverified reasons are in `public/data/geo.json`.
-**Effort:** M
 **Priority:** P2
 
 ### County lines 7P-12P and a GTFS feed
@@ -126,4 +86,18 @@
 **Effort:** S
 **Priority:** P3
 
+## Positions
+
+### The eleven stops without a map point
+
+**What:** Add them to OpenStreetMap, or confirm their positions.
+**Why:** They are only in the list: eleven of 108.
+**Context:** reasons in `public/data/geo.json`; `scripts/lib/place.mjs`. 27.11.2026.
+**Effort:** S
+**Priority:** P3
+
 ## Completed
+
+### Four fixes from the reviews, and the map as the owner saw it (27.11.2026)
+
+A maintenance page no longer marks a line "changed"; a direction with an unreadable heading is never dropped; search matches while "Osiedle" is typed; the renewal asks for every public holiday and a validity date on every page; 97 of 108 stops are on the map; D5E and the D4 detour are drawn; the computer view has a large map; the renewal reminder names `src/calendar.json`.

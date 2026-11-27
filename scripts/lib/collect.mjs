@@ -1,7 +1,7 @@
 // Collects every line from the city site. Used by build-data (to publish) and by
 // check (to compare with what was published).
 import { createHash } from 'node:crypto';
-import { LINES, fetchPage, linePageUrl, parseLinePage, pool } from './site.mjs';
+import { LINES, NotATimetable, fetchPage, linePageUrl, parseLinePage, pool } from './site.mjs';
 import { parseStopPage } from './parse-a.mjs';
 
 const DAY_SETS = {
@@ -37,6 +37,8 @@ const read = (url, fn) => {
   try {
     return fn();
   } catch (err) {
+    // No timetable at all: the comparison could not be made, nothing is known to differ.
+    if (err instanceof NotATimetable) throw new Error(`${url}: ${err.message}`);
     throw new Changed(`${url}: ${err.message}`);
   }
 };

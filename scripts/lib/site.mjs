@@ -6,6 +6,9 @@ export const SITE = 'https://legionowo.pl';
 export const LINES = ['D1', 'D2', 'D3', 'D4', 'D5E'];
 export const linePageUrl = (line) => `${SITE}/dkm-legionowo-${line.toLowerCase()}`;
 
+/** The page answered but holds no timetable at all: a maintenance or error page, not a change. */
+export class NotATimetable extends Error {}
+
 export const clean = (s) => s.replace(/[ \s]+/g, ' ').trim();
 
 export async function fetchPage(url, { tries = 3 } = {}) {
@@ -75,7 +78,9 @@ export function parseLinePage(html) {
         .filter((s) => s.name);
       return { headsign, stops };
     })
-    .filter((d) => d.headsign && d.stops.length > 1);
-  if (!directions.length) throw new Error('line page: no stop lists found');
+    .filter((d) => d.stops.length > 1);
+  if (!directions.length) throw new NotATimetable('line page: no stop lists found');
+  // Skipping it would silently remove a whole direction from the line.
+  if (directions.some((d) => !d.headsign)) throw new Error('line page: a stop list without a readable direction');
   return directions;
 }

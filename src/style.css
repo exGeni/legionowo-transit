@@ -44,3 +44,11 @@ ul { list-style: none; margin: 0; padding: 0; }
 .fine { font-size: 16px; color: var(--muted); }
 footer p { margin-top: 6px; }
 .loading { color: var(--muted); }
+/* On a computer: the choice on the left, a large map beside it. The phone keeps one column. */
+@media (min-width: 900px) {
+  #app:has(.picker) { max-width: 1200px; }
+  .picker:has(.map) { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); column-gap: 24px; row-gap: 0; }
+  .picker:has(.map) > * { grid-column: 1; margin-bottom: 12px; }
+  /* Spans more rows than the left column has, so it never stretches one of them. */
+  .picker:has(.map) > .map { grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 16px; height: calc(100vh - 32px); margin: 0; align-self: start; }
+}

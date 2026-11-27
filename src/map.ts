@@ -14,7 +14,7 @@ export function createMap(
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">autorzy OpenStreetMap</a>',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">autorzy OpenStreetMap</a> · trasy: OSRM/FOSSGIS · <a href="https://www.openstreetmap.org/fixthemap">popraw mapę</a>',
   }).addTo(map);
 
   const paths = L.layerGroup().addTo(map);
