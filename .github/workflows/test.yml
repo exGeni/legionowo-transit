@@ -2,6 +2,7 @@ name: test
 
 on:
   pull_request:
+  workflow_call: # pages.yml runs the same tests before it publishes
 
 permissions:
   contents: read

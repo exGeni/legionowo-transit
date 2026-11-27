@@ -89,8 +89,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: node scripts/alert.mjs out/report.json
 
+  test:
+    uses: ./.github/workflows/test.yml
+
   build:
-    needs: check
+    needs: [check, test]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -107,7 +110,6 @@ jobs:
         with:
           name: check
           path: out
-      - run: npm test
       - run: cp out/status.json public/data/status.json
       - run: npm run build
       - uses: actions/upload-pages-artifact@v5
