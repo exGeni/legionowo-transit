@@ -18,6 +18,22 @@
 **Effort:** S
 **Priority:** P2
 
+### Never leave an outdated built path published
+
+**What:** When no path can be drawn for a line that had one, write an empty collection; require an exact match of the stops (a suffix for the D4 detour); name `scripts/osm.mjs` and `scripts/route.mjs` in the line alert.
+**Why:** After a D5E change the old road would stay on the map while the script says it was not drawn; an extended line keeps its shorter path.
+**Context:** `scripts/osm.mjs`, `src/data.ts` (a 404 falls back to the saved copy), `scripts/check.mjs`. Second review round of the map fixes, 27.11.2026.
+**Effort:** S
+**Priority:** P1
+
+### Compare the other pages when one fails to download
+
+**What:** Treat a failed download like a page without a timetable; cover `check.mjs` passing the published pages, and the old-cache refresh.
+**Why:** One 404 or timeout hides new times on the line's other pages until the 48-hour warning.
+**Context:** `scripts/lib/collect.mjs`, `test/pipeline.test.ts`. Second review round, 27.11.2026.
+**Effort:** S
+**Priority:** P2
+
 ### Say why an alert issue was closed
 
 **What:** Close a line issue only when its state is "ok"; word the renewal issue's closing comment separately.
