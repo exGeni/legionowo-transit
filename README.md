@@ -43,7 +43,8 @@ npm run data        # reads every stop page with two independently written parse
 node scripts/osm.mjs  # stop positions and line paths (cached in .cache/osm.json)
 ```
 
-Review the difference in `public/data/`, then merge.
+Review the difference in `public/data/`, then merge. For a new validity period, first set
+`validUntil` and the dates with no rule in `src/calendar.json`.
 
 ## Develop
 
