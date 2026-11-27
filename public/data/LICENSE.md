@@ -23,7 +23,10 @@ removed if the city asks.
 ## Stop positions and line paths (`geo.json`, `lines/*.geojson`)
 
 © OpenStreetMap contributors, [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/).
-See <https://www.openstreetmap.org/copyright>.
+See <https://www.openstreetmap.org/copyright>. The D5E path and the D4 detour were built
+from OpenStreetMap roads by the [FOSSGIS OSRM service](https://routing.openstreetmap.de/);
+they follow a car route through the stops and are not the town's own trace. Errors in the
+map itself can be fixed at <https://www.openstreetmap.org/fixthemap>.
 
 ## Format of `timetable.json`
 

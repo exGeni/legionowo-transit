@@ -50,10 +50,15 @@ export function platforms(table: Timetable): Platform[] {
 }
 
 const plain = (s: string) =>
-  s.toLowerCase().replace(/\bosiedle\b/g, 'os.').replace(/ł/g, 'l').normalize('NFD').replace(/[̀-ͯ]/g, '');
+  s.toLowerCase().replace(/ł/g, 'l').normalize('NFD').replace(/[̀-ͯ]/g, '');
 
-export const matches = (p: Platform, query: string) =>
-  plain(`${p.name} ${p.services.map((s) => s.headsign).join(' ')}`).includes(plain(query.trim()));
+// The city writes "Os." and "Osiedle" for the same place; a rider may be half-way through
+// typing either, so both spellings are searched.
+export function matches(p: Platform, query: string): boolean {
+  const text = plain(`${p.name} ${p.services.map((s) => s.headsign).join(' ')}`);
+  const wanted = plain(query.trim());
+  return [text, text.replace(/\bosiedle\b/g, 'os.'), text.replace(/\bos\.\s*/g, 'osiedle ')].some((t) => t.includes(wanted));
+}
 
 export function metres(a: [number, number], b: [number, number]): number {
   const k = Math.cos((a[0] * Math.PI) / 180);

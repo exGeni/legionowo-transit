@@ -1,6 +1,6 @@
 // First timetable parser: walks the DOM of a stop page.
 import * as cheerio from 'cheerio';
-import { clean } from './site.mjs';
+import { NotATimetable, clean } from './site.mjs';
 
 const MONTHS = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca',
   'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
@@ -19,7 +19,7 @@ export function parseStopPage(html) {
   // page body. Either way its parent holds the "kierunek / Linia" heading.
   let block = $('div.rozklad1').filter((_, el) => /Linia/.test($(el).text())).first();
   if (!block.length) block = $('p').filter((_, el) => /kierunek:[\s\S]*Linia/.test($(el).text())).first().parent();
-  if (!block.length) throw new Error('stop page: no timetable block');
+  if (!block.length) throw new NotATimetable('stop page: no timetable block');
 
   // Direction and line are bold, outside the tables and the side stop list.
   const strongs = block.find('strong')

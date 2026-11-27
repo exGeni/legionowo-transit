@@ -66,7 +66,10 @@ export function upcoming(
   const found: Departure[] = [];
   for (let i = 0; i < SEARCH_DAYS && found.length < count; i++) {
     const date = addDays(today, i);
-    if (UNCONFIRMED_DATES.has(date)) return { departures: found.slice(0, count), unconfirmed: date };
+    // Past the validity date nothing is promised. A list already expired as a whole is
+    // still shown, with its own warning.
+    const beyond = date > table.validUntil && today <= table.validUntil;
+    if (beyond || UNCONFIRMED_DATES.has(date)) return { departures: found.slice(0, count), unconfirmed: date };
     const day = String(weekday(date));
     const ofDay: Departure[] = [];
     for (const l of table.lines) {

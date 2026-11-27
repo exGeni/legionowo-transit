@@ -30,7 +30,7 @@ export function renewal(validUntil, now) {
   return {
     line: 'renewal',
     title: 'Timetable renewal: verify before it expires',
-    body: `The published timetable is valid to ${validUntil}. Run \`npm run data\`, check the dates with no rule in src/schedule.ts, set the new validity and merge.`,
+    body: `The published timetable is valid to ${validUntil}. First set the new validity and the dates with no rule (every public holiday and 31 December) in src/calendar.json, then run \`npm run data\`, review and merge.`,
   };
 }
 

@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { assemble } from './lib/assemble.mjs';
 import { collectAll, daySet, isArrivalPage } from './lib/collect.mjs';
 import { SITE } from './lib/site.mjs';
+import { missingHolidays, undated } from './lib/renewal.mjs';
 import { parseStopPage as parseB } from './lib/parse-b.mjs';
 
 // Measured on https://legionowo.pl/dkmlegionowo; D2 gets dark text for contrast.
@@ -15,8 +16,20 @@ const COLORS = {
 // Validity and the dates without a rule are kept together; see src/schedule.ts.
 const calendar = JSON.parse(readFileSync('src/calendar.json', 'utf8'));
 const VALID_UNTIL = calendar.validUntil;
-if (!calendar.unconfirmed.includes(`${VALID_UNTIL.slice(0, 4)}-12-25`)) {
-  console.error('src/calendar.json: list the holidays of the year the validity ends in; nothing written.');
+const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Warsaw' }).format(new Date());
+const isDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d))
+  && new Date(Date.parse(d)).toISOString().startsWith(d);
+if (![VALID_UNTIL, ...calendar.unconfirmed].every(isDate)) {
+  console.error('src/calendar.json: every date must be written as YYYY-MM-DD; nothing written.');
+  process.exit(1);
+}
+if (VALID_UNTIL < today) {
+  console.error(`src/calendar.json: validUntil ${VALID_UNTIL} is already past; nothing written.`);
+  process.exit(1);
+}
+const holidays = missingHolidays(calendar, today);
+if (holidays.length) {
+  console.error(`src/calendar.json: public holidays not listed as unconfirmed: ${holidays.join(', ')}; nothing written.`);
   process.exit(1);
 }
 
@@ -46,7 +59,12 @@ if (disagreements.length) {
   process.exit(1);
 }
 
-const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Warsaw' }).format(new Date());
+const unreadable = collected.flatMap((c) => undated(c.pages));
+if (unreadable.length) {
+  console.error(unreadable.slice(0, 5).join('\n'));
+  console.error(`\n${unreadable.length} page(s) without a readable validity date; nothing written.`);
+  process.exit(1);
+}
 // A timetable published early must not replace the one in force today.
 const early = collected.flatMap((c) =>
   [...c.pages].filter(([, p]) => p.validFrom > today).map(([url, p]) => `${url}: valid from ${p.validFrom}`));
