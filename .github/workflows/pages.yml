@@ -24,11 +24,16 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: write # the status branch
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }} # the one commit this run checks, tests and publishes
     steps:
       - uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 1
+
+      - id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-node@v7
         with:
@@ -79,7 +84,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ needs.check.outputs.sha }}
           persist-credentials: false
       - uses: actions/download-artifact@v8
         with:
@@ -90,7 +95,10 @@ jobs:
         run: node scripts/alert.mjs out/report.json
 
   test:
+    needs: check
     uses: ./.github/workflows/test.yml
+    with:
+      ref: ${{ needs.check.outputs.sha }}
 
   build:
     needs: [check, test]
@@ -99,7 +107,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ needs.check.outputs.sha }}
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:

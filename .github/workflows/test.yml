@@ -3,6 +3,10 @@ name: test
 on:
   pull_request:
   workflow_call: # pages.yml runs the same tests before it publishes
+    inputs:
+      ref:
+        description: Commit to test; empty means the commit that started the run
+        type: string
 
 permissions:
   contents: read
@@ -13,6 +17,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
       - uses: actions/setup-node@v7
         with:
           node-version: 24
