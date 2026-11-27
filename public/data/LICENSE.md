@@ -27,7 +27,8 @@ See <https://www.openstreetmap.org/copyright>.
 
 ## Format of `timetable.json`
 
-- `stops`: stop post id to `{ name }`; the name carries the post number.
+- `stops`: stop post id to `{ name }`; the name carries the post number where the
+  city's pages give one.
 - `lines[].directions[].stops[]`: in route order. `days` maps weekday numbers
   (`"12345"`, `"6"`, `"123456"`; 1 = Monday) to departure times, or is `null` where
   nobody boards or the city gives no time. `suspect` marks stops whose times contradict
