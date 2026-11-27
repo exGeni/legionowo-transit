@@ -10,6 +10,22 @@
 **Effort:** S
 **Priority:** P1
 
+### Do not drop a direction whose heading cannot be read
+
+**What:** Fail when a stop list has two or more stops but no readable heading.
+**Why:** A changed page heading would silently remove a whole direction at the next refresh, and the check would then report the line as matching.
+**Context:** the direction filter in `scripts/lib/site.mjs`. Final review, 27.11.2026.
+**Effort:** S
+**Priority:** P1
+
+### Make the timetable renewal safe before it is due
+
+**What:** Require every public holiday up to `validUntil` in `src/calendar.json`; stop the countdown search at `validUntil`; refuse a stop page without a readable validity date.
+**Why:** The published timetable is valid to 31.12.2026, so a renewal is close. Today only 25 December is required, and a missing validity date passes.
+**Context:** `scripts/build-data.mjs`, `src/schedule.ts`. Final review, 27.11.2026.
+**Effort:** M
+**Priority:** P1
+
 ### Clear "changed" against the version it was detected on
 
 **What:** Store which published version a difference was seen against; clear when a newer one is published.
@@ -24,6 +40,40 @@
 **Why:** The check only requires the second parser not to throw; an emptied line would be published.
 **Context:** `scripts/check.mjs`, `scripts/build-data.mjs`.
 **Effort:** S
+**Priority:** P2
+
+### Say why an alert issue was closed
+
+**What:** Close a line issue only when its state is "ok"; word the renewal issue's closing comment separately.
+**Why:** Every closed issue says the town's site matches again, also when nothing was compared.
+**Context:** `scripts/alert.mjs`. Final review, 27.11.2026.
+**Effort:** S
+**Priority:** P3
+
+### Publishing re-runs
+
+**What:** Decide whether re-running only the failed jobs of an old run may publish; load the test steps from the published commit.
+**Why:** Such a re-run can put an older version back until the next scheduled run.
+**Context:** `.github/workflows/pages.yml`. Review of the publishing fix, 27.11.2026.
+**Effort:** S
+**Priority:** P3
+
+### Bound the map helper's retries
+
+**What:** Split the map box only a limited number of times, and fail on a missing relation.
+**Why:** Any HTTP 400 is treated as "too many nodes" and retried with ever more requests.
+**Context:** `scripts/osm.mjs`, run by hand. Final review, 27.11.2026.
+**Effort:** S
+**Priority:** P3
+
+## Tests
+
+### Cover the screens and the refusals that have no tests
+
+**What:** Tests for the stop picker, the show-saved-copy-then-refresh path and `build-data`'s refusals; shorten the slow "city unreachable" test.
+**Why:** A regression there would not fail the build.
+**Context:** `src/picker.ts`, `src/main.ts`, `scripts/build-data.mjs`, `test/pipeline.test.ts`.
+**Effort:** M
 **Priority:** P2
 
 ## App
@@ -58,6 +108,22 @@
 **Why:** The owner chose to ship the D lines first.
 **Context:** `docs/designs/time-to-leave.md`.
 **Effort:** L
+**Priority:** P3
+
+### Small things seen on the live site
+
+**What:** Do not request the D5E path that does not exist; put "Trasa D5E nie jest jeszcze narysowana" next to the map; name the line beside each validity date in the footer.
+**Why:** A failed request on every map draw; the note sits below the whole stop list; four dates without line names mean nothing to a rider.
+**Context:** `src/map.ts`, `src/picker.ts`, `src/board.ts`. First-use check, 27.11.2026.
+**Effort:** S
+**Priority:** P3
+
+### Redraw the board when a bus stops being reachable
+
+**What:** Redraw at the moment the walking deadline passes, not only when the minute changes.
+**Why:** A board drawn exactly at the deadline offers an unreachable bus for up to a minute.
+**Context:** the timer in `src/board.ts`. Codex review on GitHub, 27.11.2026.
+**Effort:** S
 **Priority:** P3
 
 ## Completed
