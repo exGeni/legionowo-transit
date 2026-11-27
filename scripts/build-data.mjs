@@ -17,6 +17,10 @@ const COLORS = {
 const calendar = JSON.parse(readFileSync('src/calendar.json', 'utf8'));
 const VALID_UNTIL = calendar.validUntil;
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Warsaw' }).format(new Date());
+if (VALID_UNTIL < today) {
+  console.error(`src/calendar.json: validUntil ${VALID_UNTIL} is already past; nothing written.`);
+  process.exit(1);
+}
 const holidays = missingHolidays(calendar, today);
 if (holidays.length) {
   console.error(`src/calendar.json: public holidays not listed as unconfirmed: ${holidays.join(', ')}; nothing written.`);

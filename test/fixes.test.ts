@@ -109,3 +109,23 @@ describe('placing stops on the map', () => {
     expect(unverified.d).toContain('two places');
   });
 });
+
+describe('placing stops that are on no mapped route', () => {
+  // Added by /gstack-ship test coverage audit.
+  // Value: protects=an unmapped stop gets the nearest same-named point, none beyond 2 km, except Metro Młociny 25;
+  //   fails_when=a farther namesake wins, the distance limit goes, or the metro exception is lost;
+  //   why_new=the test above never exceeds the limit or checks which namesake wins; seam=none;
+  //   no_claim=real OpenStreetMap data (hand-made nodes).
+  it('takes the nearest namesake, refuses a far one, and keeps the metro terminus', () => {
+    const node = (name: string, lat: number) => ({ name, lat, lon: 20.9, platform: true });
+    const { geo, unverified } = place({
+      stops: { a: { name: 'Orzechowa 01' }, b: { name: 'Dębowa 01' }, f: { name: 'Daleka 01' }, m: { name: 'Metro Młociny 25' } },
+      lines: [{ id: 'D5E', directions: [{ stops: [{ stop: 'a' }, { stop: 'b' }, { stop: 'f' }, { stop: 'm' }] }] }],
+    }, {
+      nodes: [node('Orzechowa 01', 52.4), node('Dębowa 01', 52.41), node('Dębowa 01', 52.401),
+        node('Daleka 01', 52.44), node('Metro Młociny 25', 52.29)],
+    });
+    expect(geo).toEqual({ a: [52.4, 20.9], b: [52.401, 20.9], m: [52.29, 20.9] });
+    expect(Object.keys(unverified)).toEqual(['f']);
+  });
+});
