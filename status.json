@@ -1,0 +1,26 @@
+{
+ "checkedAt": "2026-11-27T11:16:48.969Z",
+ "verifiedAt": "2026-11-27T10:01:05.765Z",
+ "lines": {
+  "D1": {
+   "state": "ok",
+   "lastCompared": "2026-11-27T11:16:48.969Z"
+  },
+  "D2": {
+   "state": "ok",
+   "lastCompared": "2026-11-27T11:16:48.969Z"
+  },
+  "D3": {
+   "state": "ok",
+   "lastCompared": "2026-11-27T11:16:48.969Z"
+  },
+  "D4": {
+   "state": "ok",
+   "lastCompared": "2026-11-27T11:16:48.969Z"
+  },
+  "D5E": {
+   "state": "ok",
+   "lastCompared": "2026-11-27T11:16:48.969Z"
+  }
+ }
+}
