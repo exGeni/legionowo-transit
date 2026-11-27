@@ -86,11 +86,11 @@
 **Effort:** L
 **Priority:** P3
 
-### Small things seen on the live site
+### Name the line beside each validity date in the footer
 
-**What:** Do not request the D5E path that does not exist; put "Trasa D5E nie jest jeszcze narysowana" next to the map; name the line beside each validity date in the footer.
-**Why:** A failed request on every map draw; the note sits below the whole stop list; four dates without line names mean nothing to a rider.
-**Context:** `src/map.ts`, `src/picker.ts`, `src/board.ts`. First-use check, 27.11.2026.
+**What:** Say which line each "obowiązuje od" date belongs to.
+**Why:** Four dates without line names mean nothing to a rider.
+**Context:** `src/board.ts`. First-use check, 27.11.2026.
 **Effort:** S
 **Priority:** P3
 
