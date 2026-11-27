@@ -19,7 +19,8 @@ where the bus really is.
 
 - All stops of the five lines in a searchable list, with the nearest ones first.
 - A map with all five paths. A stop has a point where its name and post number match
-  OpenStreetMap, on the line's route there or next to its neighbouring stops; the side of
+  OpenStreetMap, on the line's route there or next to its neighbouring stops (Metro
+  Młociny 25, far from both neighbours, is matched by name and number alone); the side of
   the road is taken from the post number as mapped, not checked. The others are only in
   the list. D5E and the D4 detour by Polna and Krakusa have no route in OpenStreetMap:
   a router (OSRM) built them from the order of the stops.
