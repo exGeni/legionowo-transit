@@ -17,6 +17,12 @@ const COLORS = {
 const calendar = JSON.parse(readFileSync('src/calendar.json', 'utf8'));
 const VALID_UNTIL = calendar.validUntil;
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Warsaw' }).format(new Date());
+const isDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d))
+  && new Date(Date.parse(d)).toISOString().startsWith(d);
+if (![VALID_UNTIL, ...calendar.unconfirmed].every(isDate)) {
+  console.error('src/calendar.json: every date must be written as YYYY-MM-DD; nothing written.');
+  process.exit(1);
+}
 if (VALID_UNTIL < today) {
   console.error(`src/calendar.json: validUntil ${VALID_UNTIL} is already past; nothing written.`);
   process.exit(1);

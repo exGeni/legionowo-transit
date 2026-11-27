@@ -30,7 +30,9 @@ export function publicHolidays(year) {
 export function missingHolidays({ validUntil, unconfirmed }, today) {
   const out = [];
   for (let year = Number(today.slice(0, 4)); year <= Number(validUntil.slice(0, 4)); year++) {
-    out.push(...publicHolidays(year).filter((d) => d >= today && d <= validUntil && !unconfirmed.includes(d)));
+    // The town's pages give no rule for New Year's Eve either.
+    out.push(...[...publicHolidays(year), `${year}-12-31`]
+      .filter((d) => d >= today && d <= validUntil && !unconfirmed.includes(d)));
   }
   return out;
 }

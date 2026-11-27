@@ -42,7 +42,9 @@ for (const line of LINES) {
   let result;
   let detail;
   try {
-    const fresh = await within(collectLine(line, { onPage, publishedStopList: sources.lines[line].stopList }));
+    const fresh = await within(collectLine(line, {
+      onPage, publishedStopList: sources.lines[line].stopList, publishedPages: sources.lines[line].pages,
+    }));
     detail = difference(sources.lines[line], fresh.prints);
     result = detail ? 'different' : 'same';
   } catch (err) {

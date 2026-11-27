@@ -25,8 +25,12 @@ const wanted = [
 ];
 
 const lines = {};
+const through = {}; // the stops each path was built from, checked again when it is drawn
 for (const [id, ids] of wanted) {
-  const points = ids.map((stop) => stops[stop]).filter(Boolean);
+  // Leaving one out would draw a road that passes it by.
+  const missing = ids.filter((stop) => !stops[stop]);
+  if (missing.length) throw new Error(`${id}: no map point for ${missing.join(', ')}; no path written`);
+  const points = ids.map((stop) => stops[stop]);
   const path = points.map(([lat, lon]) => `${lon},${lat}`).join(';');
   const res = await fetch(`${ROUTER}/${path}?overview=full&geometries=geojson&continue_straight=true`, {
     headers: { 'user-agent': 'timetable-check' },
@@ -36,12 +40,14 @@ for (const [id, ids] of wanted) {
   if (body.code !== 'Ok') throw new Error(`${id}: router answered ${body.code ?? res.status}`);
   const [route] = body.routes;
   (lines[id] ??= []).push(route.geometry.coordinates);
-  console.log(`${id}: ${ids.length} stops, ${points.length} with a point, ${(route.distance / 1000).toFixed(1)} km`);
+  (through[id] ??= []).push(ids);
+  console.log(`${id}: ${ids.length} stops, ${(route.distance / 1000).toFixed(1)} km`);
   await new Promise((done) => setTimeout(done, 1500)); // the service allows one request a second
 }
 
 writeFileSync('scripts/routed.json', `${JSON.stringify({
   fetched: new Date().toISOString().slice(0, 10),
   attribution: '© autorzy OpenStreetMap, licencja ODbL 1.0; trasa wyznaczona przez OSRM (FOSSGIS)',
+  through,
   lines,
 })}\n`);

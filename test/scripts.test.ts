@@ -44,7 +44,7 @@ describe('publishing a timetable (npm run data)', () => {
   it('writes nothing until holidays are listed and every page has a validity date', { timeout: 120_000 }, () => {
     const s = sandbox(city);
     const year = new Date().getUTCFullYear();
-    const calendar = { validUntil: `${year + 1}-12-31`, unconfirmed: [...publicHolidays(year), ...publicHolidays(year + 1)] };
+    const calendar = { validUntil: `${year + 1}-12-31`, unconfirmed: [year, year + 1].flatMap((y) => [...publicHolidays(y), `${y}-12-31`]) };
     const dated = { VALIDITY: 'Obowiązuje od 2 stycznia 2026' };
     const written = () => existsSync(join(s.dir, 'public/data/timetable.json'));
 
@@ -52,6 +52,11 @@ describe('publishing a timetable (npm run data)', () => {
     const past = s.run('scripts/build-data.mjs', dated);
     expect([past.status, written()]).toEqual([1, false]);
     expect(past.stderr).toContain('already past');
+
+    s.put('src/calendar.json', { ...calendar, validUntil: `31.12.${year + 1}` });
+    const misspelt = s.run('scripts/build-data.mjs', dated);
+    expect([misspelt.status, written()]).toEqual([1, false]);
+    expect(misspelt.stderr).toContain('YYYY-MM-DD');
 
     s.put('src/calendar.json', { ...calendar, unconfirmed: [] });
     const holidays = s.run('scripts/build-data.mjs', dated);
@@ -96,7 +101,11 @@ describe('building the map data (scripts/osm.mjs)', () => {
       stops: { a: { name: 'A 01' }, b: { name: 'B 01' }, c: { name: 'C 01' } },
       lines: [line('D1'), line('D4'), line('D5E')],
     });
-    s.put('scripts/routed.json', { lines: { D4: [[[20.9100001, 52.41], [20.92, 52.42]]], D5E: [[[20.93, 52.29], [20.94, 52.3]]] } });
+    // The second D4 path was built through a stop the line no longer lists: it is not drawn.
+    s.put('scripts/routed.json', {
+      through: { D4: [['b', 'c'], ['b', 'gone']], D5E: [['a', 'b', 'c']] },
+      lines: { D4: [[[20.9100001, 52.41], [20.92, 52.42]], [[1, 1], [2, 2]]], D5E: [[[20.93, 52.29], [20.94, 52.3]]] },
+    });
     const result = s.run('scripts/osm.mjs');
     expect(result.status, result.stderr).toBe(0);
 
@@ -141,5 +150,11 @@ describe('routing the unmapped parts (scripts/route.mjs)', () => {
 
     s.put('public/data/timetable.json', timetable(['x', 'c']));
     expect(s.run('scripts/route.mjs').stderr).toContain('detour no longer starts');
+
+    // A stop without a point must not be skipped over.
+    s.put('public/data/timetable.json', timetable(['x', 'sloneczna-01', 'unplaced', 'c']));
+    const gap = s.run('scripts/route.mjs');
+    expect(gap.status).not.toBe(0);
+    expect(gap.stderr).toContain('no map point for unplaced');
   });
 });

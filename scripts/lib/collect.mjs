@@ -43,7 +43,7 @@ const read = (url, fn) => {
   }
 };
 
-export async function collectLine(line, { onPage, publishedStopList } = {}) {
+export async function collectLine(line, { onPage, publishedStopList, publishedPages } = {}) {
   const pageUrl = linePageUrl(line);
   const lineHtml = await fetchPage(pageUrl);
   const directions = read(pageUrl, () => parseLinePage(lineHtml));
@@ -53,18 +53,30 @@ export async function collectLine(line, { onPage, publishedStopList } = {}) {
     throw new Changed(`${pageUrl}: list of stops differs`);
   }
   const urls = [...new Set(directions.flatMap((d) => d.stops.map((s) => s.url)).filter(Boolean))];
-  const pages = new Map(
-    await pool(urls, 4, async (url) => {
-      const html = await fetchPage(url);
-      const page = read(url, () => parseStopPage(html));
-      if (page.line !== line) throw new Changed(`${url}: page is for line ${page.line}, not ${line}`);
-      onPage?.(url, html, page);
-      return [url, page];
-    }),
-  );
+  const notices = []; // pages that answered without a timetable; the others are still read
+  const results = await pool(urls, 4, async (url) => {
+    const html = await fetchPage(url);
+    let page;
+    try {
+      page = read(url, () => parseStopPage(html));
+    } catch (err) {
+      if (err instanceof Changed) throw err;
+      notices.push(err);
+      return null;
+    }
+    if (page.line !== line) throw new Changed(`${url}: page is for line ${page.line}, not ${line}`);
+    onPage?.(url, html, page);
+    return [url, page];
+  });
+  const pages = new Map(results.filter(Boolean));
   const prints = { stopList: fingerprint(stopLists), pages: {} };
   for (const [url, page] of pages) {
     prints.pages[url] = fingerprint({ days: page.days, validFrom: page.validFrom, arrivals: isArrivalPage(page) });
+  }
+  if (notices.length) {
+    const differs = Object.entries(prints.pages).find(([url, print]) => publishedPages && publishedPages[url] !== print);
+    if (differs) throw new Changed(`${differs[0]}: differs (and ${notices.length} page(s) hold no timetable)`);
+    throw notices[0];
   }
   return { line, directions, pages, prints };
 }

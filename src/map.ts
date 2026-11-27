@@ -10,11 +10,12 @@ export function createMap(
   element: HTMLElement, table: Timetable, geo: Geo, all: Platform[], onPick: (id: string) => void,
 ) {
   const map = L.map(element, { zoomControl: false }).setView([52.4045, 20.935], 13);
+  map.attributionControl.setPrefix(false); // one line on a phone, clear of the zoom buttons
   // Bottom corner: at the top the buttons covered the stop card.
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">autorzy OpenStreetMap</a> · trasy: OSRM/FOSSGIS · <a href="https://www.openstreetmap.org/fixthemap">popraw mapę</a>',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">autorzy OpenStreetMap</a> · trasy: OSRM',
   }).addTo(map);
 
   const paths = L.layerGroup().addTo(map);

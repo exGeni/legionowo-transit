@@ -26,11 +26,27 @@ describe('a city page that is not a timetable', () => {
   it('counts as "could not compare", not as a change', async () => {
     const maintenance = '<html><body><h1>Przerwa techniczna</h1></body></html>';
     serve({ '/dkm-legionowo-d1': maintenance });
-    expect(await failure()).not.toBeInstanceOf(Changed);
+    const linePage = await failure();
+    expect(linePage?.message).toContain('no stop lists found');
+    expect(linePage).not.toBeInstanceOf(Changed);
     serve({ '/dkm-legionowo-d1': `${list('Centrum')}</div>`, '/d1-a': maintenance });
     const stopPage = await failure();
     expect(stopPage?.message).toContain('no timetable block');
     expect(stopPage).not.toBeInstanceOf(Changed);
+  });
+
+  it('still reports a change on the other pages when one page holds no timetable', async () => {
+    const page = (minutes: string) => `<div class="breadcrumb-1">Przystanek: A 01</div><div class="rozklad1"><p>kierunek: <strong>Centrum</strong> Linia <strong>D1</strong></p>
+      <table><tr><td>Sobota</td></tr><tr><td>godz.</td><td>min.</td></tr><tr><td>6</td><td>${minutes}</td></tr></table></div>`;
+    const two = '<div class="rozklady"><div><p><strong>Centrum</strong></p><ul><li><a href="/d1-a">A 01</a></li><li><a href="/d1-b">B 01</a></li></ul></div></div>';
+    serve({ '/dkm-legionowo-d1': two, '/d1-a': page('30'), '/d1-b': page('40') });
+    const published = (await collectLine('D1')).prints;
+    const run = () => collectLine('D1', { publishedPages: published.pages }).then(() => null, (error: Error) => error);
+
+    serve({ '/dkm-legionowo-d1': two, '/d1-a': page('30'), '/d1-b': '<h1>Przerwa</h1>' });
+    expect(await run()).not.toBeInstanceOf(Changed);
+    serve({ '/dkm-legionowo-d1': two, '/d1-a': page('31'), '/d1-b': '<h1>Przerwa</h1>' });
+    expect(await run()).toBeInstanceOf(Changed);
   });
 
   it('never drops a direction whose heading cannot be read', async () => {
@@ -60,7 +76,7 @@ describe('renewing the timetable', () => {
 
   it('asks for every holiday up to the validity date, and only those', () => {
     const calendar = { validUntil: '2027-01-06', unconfirmed: ['2026-12-24', '2026-12-25', '2026-12-26'] };
-    expect(missingHolidays(calendar, '2026-11-27')).toEqual(['2027-01-01', '2027-01-06']);
+    expect(missingHolidays(calendar, '2026-11-27')).toEqual(['2026-12-31', '2027-01-01', '2027-01-06']);
   });
 
   it('names pages with departures but no readable validity date', () => {

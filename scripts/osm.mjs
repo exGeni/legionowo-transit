@@ -74,13 +74,23 @@ async function download() {
 }
 
 mkdirSync('.cache', { recursive: true });
-const osm = existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, 'utf8')) : await download();
+const cached = existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, 'utf8')) : null;
+// A cache written before route members were kept would place stops differently.
+const osm = cached?.members ? cached : await download();
 writeFileSync(CACHE, JSON.stringify(osm));
 
 const timetable = JSON.parse(readFileSync('public/data/timetable.json', 'utf8'));
 
 const { geo, unverified } = place(timetable, osm);
 const routed = JSON.parse(readFileSync('scripts/routed.json', 'utf8'));
+// A built path is drawn only while the town still lists the stops it was built through.
+const stillListed = (id, ids) => timetable.lines.find((l) => l.id === id).directions
+  .some((d) => `,${d.stops.map((s) => s.stop)},`.includes(`,${ids},`));
+const builtPaths = (id) => (routed.lines[id] ?? []).filter((_, i) => {
+  const current = stillListed(id, routed.through?.[id]?.[i] ?? ['unknown']);
+  if (!current) console.warn(`${id}: the stops changed since a path was built; run scripts/route.mjs. Path not drawn.`);
+  return current;
+});
 
 mkdirSync('public/data/lines', { recursive: true });
 const attribution = '© autorzy OpenStreetMap, licencja ODbL 1.0';
@@ -89,7 +99,7 @@ writeFileSync('public/data/geo.json',
 for (const line of timetable.lines) {
   const drawn = [
     ...Object.values(osm.ways[line.id] ?? {}),
-    ...(routed.lines[line.id] ?? []),
+    ...builtPaths(line.id),
   ].map((w) => w.map(([x, y]) => [Number(x.toFixed(6)), Number(y.toFixed(6))]));
   if (!drawn.length) continue;
   writeFileSync(`public/data/lines/${line.id}.geojson`, `${JSON.stringify({
