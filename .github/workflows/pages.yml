@@ -1,0 +1,129 @@
+# Every publication first compares the city site with the published timetable, so the
+# site never goes out without a fresh status. Runs every 6 hours and on every merge.
+name: pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+# One at a time, never cancelled half-way: an older run cannot overwrite a newer one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # Only this job may write to the repository, and it runs no package scripts.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # the status branch
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Open the status branch
+        run: |
+          if git fetch --depth 1 origin status; then
+            git worktree add -B status .status FETCH_HEAD
+          else
+            git worktree add --orphan -b status .status
+          fi
+
+      - name: Compare with the city site
+        run: node scripts/check.mjs .status/status.json .report.json
+
+      - name: Keep the status
+        working-directory: .status
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add status.json
+          git commit -m "status: $(date -u +%FT%TZ)"
+          git push origin status
+
+      - name: Hand the results to the other jobs
+        run: |
+          mkdir out
+          cp .status/status.json out/status.json
+          cp .report.json out/report.json
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: check
+          path: out
+
+  # Apart from publishing: a failure to write an issue must not keep riders from a warning.
+  alert:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: check
+          path: out
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/alert.mjs out/report.json
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          name: check
+          path: out
+      - run: npm test
+      - run: cp out/status.json public/data/status.json
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v5

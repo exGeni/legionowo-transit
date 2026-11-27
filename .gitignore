@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.cache/
+public/data/status.json
+.status/
+.report.json
