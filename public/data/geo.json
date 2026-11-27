@@ -1,0 +1,296 @@
+{
+ "attribution": "© autorzy OpenStreetMap, licencja ODbL 1.0",
+ "fetched": "2026-11-27",
+ "stops": {
+  "wolska-01": [
+   52.411806,
+   20.95889
+  ],
+  "zegrzynska-imgw-04": [
+   52.40919,
+   20.955337
+  ],
+  "al-sybirakow-03": [
+   52.40947,
+   20.949595
+  ],
+  "os-piaski-03": [
+   52.405423,
+   20.94948
+  ],
+  "zegrzynska-01": [
+   52.403494,
+   20.948389
+  ],
+  "sielankowa-04": [
+   52.395657,
+   20.937941
+  ],
+  "ch-blekitne-03": [
+   52.397531,
+   20.934152
+  ],
+  "urzad-miasta-03": [
+   52.39441,
+   20.929445
+  ],
+  "siwinskiego-02": [
+   52.391876,
+   20.923307
+  ],
+  "husarska-02": [
+   52.394891,
+   20.920154
+  ],
+  "rycerska-04": [
+   52.396723,
+   20.919506
+  ],
+  "mickiewicza-05": [
+   52.398056,
+   20.920938
+  ],
+  "rycerska-01": [
+   52.39592,
+   20.919081
+  ],
+  "husarska-01": [
+   52.393409,
+   20.920952
+  ],
+  "siwinskiego-04": [
+   52.391758,
+   20.924854
+  ],
+  "urzad-miasta-02": [
+   52.395401,
+   20.930836
+  ],
+  "zegrzynska-02": [
+   52.403427,
+   20.94885
+  ],
+  "os-piaski-04": [
+   52.405448,
+   20.949878
+  ],
+  "al-sybirakow-04": [
+   52.40969,
+   20.950059
+  ],
+  "al-sybirakow-01": [
+   52.410384,
+   20.951432
+  ],
+  "orzechowa-01": [
+   52.418254,
+   20.924087
+  ],
+  "cynkowa-02": [
+   52.415012,
+   20.921395
+  ],
+  "aleja-roz-02": [
+   52.414085,
+   20.916761
+  ],
+  "parkowa-01": [
+   52.406578,
+   20.919149
+  ],
+  "rondo-wosp-01": [
+   52.403015,
+   20.915053
+  ],
+  "arena-legionowo-01": [
+   52.399604,
+   20.916326
+  ],
+  "rynek-01": [
+   52.399524,
+   20.9377
+  ],
+  "rycerska-02": [
+   52.397097,
+   20.918463
+  ],
+  "arena-legionowo-02": [
+   52.400162,
+   20.916135
+  ],
+  "rondo-wosp-02": [
+   52.402867,
+   20.9152
+  ],
+  "parkowa-02": [
+   52.407184,
+   20.918916
+  ],
+  "cynkowa-03": [
+   52.414793,
+   20.919861
+  ],
+  "orzechowa-02": [
+   52.417043,
+   20.923315
+  ],
+  "miedziana-01": [
+   52.414943,
+   20.91328
+  ],
+  "topolowa-01": [
+   52.417067,
+   20.904583
+  ],
+  "pkp-legionowo-przystanek-03": [
+   52.411228,
+   20.91532
+  ],
+  "kladka-pkp-01": [
+   52.40976,
+   20.922798
+  ],
+  "os-kozlowka-01": [
+   52.409819,
+   20.937615
+  ],
+  "struzanska-01": [
+   52.40407,
+   20.950326
+  ],
+  "krakusa-01": [
+   52.401008,
+   20.954335
+  ],
+  "polna-01": [
+   52.399359,
+   20.955564
+  ],
+  "sloneczna-02": [
+   52.39805,
+   20.95146
+  ],
+  "os-kozlowka-02": [
+   52.409793,
+   20.937307
+  ],
+  "kladka-pkp-02": [
+   52.409627,
+   20.923607
+  ],
+  "pkp-legionowo-przystanek-04": [
+   52.411211,
+   20.915827
+  ],
+  "topolowa-02": [
+   52.416983,
+   20.904572
+  ],
+  "miedziana-02": [
+   52.414792,
+   20.913349
+  ],
+  "pkp-legionowo-03": [
+   52.400581,
+   20.941424
+  ],
+  "ks-skorupki-02": [
+   52.403817,
+   20.924952
+  ],
+  "urzad-miasta-01": [
+   52.394269,
+   20.93149
+  ],
+  "sowinskiego-03": [
+   52.392969,
+   20.934106
+  ],
+  "zakopianska-02": [
+   52.391579,
+   20.937875
+  ],
+  "przemyslowa-02": [
+   52.396312,
+   20.944127
+  ],
+  "polna-02": [
+   52.399195,
+   20.955236
+  ],
+  "krakusa-02": [
+   52.401507,
+   20.953956
+  ],
+  "przemyslowa-01": [
+   52.396109,
+   20.943717
+  ],
+  "zakopianska-01": [
+   52.391453,
+   20.937571
+  ],
+  "sowinskiego-04": [
+   52.392951,
+   20.934584
+  ],
+  "ks-skorupki-01": [
+   52.403396,
+   20.925582
+  ],
+  "pkp-legionowo-02": [
+   52.400711,
+   20.941474
+  ]
+ },
+ "unverified": {
+  "lesna-01": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "objazdowa-02": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "glowna-nr-2-02": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "glowna-nr-26-01": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "debowa-01": "side of the road cannot be told",
+  "wspolna-01": "side of the road cannot be told",
+  "grudzie-01": "side of the road cannot be told",
+  "radosna-01": "side of the road cannot be told",
+  "partyzantow-01": "side of the road cannot be told",
+  "mickiewicza-01": "side of the road contradicts the direction of travel",
+  "ch-blekitne-01": "side of the road cannot be told",
+  "zegrzynska-imgw-02": "side of the road cannot be told",
+  "partyzantow-02": "side of the road cannot be told",
+  "radosna-02": "side of the road cannot be told",
+  "grudzie-02": "side of the road cannot be told",
+  "wspolna-02": "side of the road cannot be told",
+  "debowa-02": "side of the road cannot be told",
+  "glowna-nr-62-02": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "glowna-nr-2-01": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "objazdowa-01": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "os-mlodych-01": "side of the road contradicts the direction of travel",
+  "pkp-legionowo-przystanek-01": "side of the road contradicts the direction of travel",
+  "os-batorego-02": "side of the road contradicts the direction of travel",
+  "pkp-legionowo-centrum": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "sosnowa-01": "side of the road cannot be told",
+  "szczygla-01": "side of the road cannot be told",
+  "al-legionow-01": "side of the road cannot be told",
+  "pkp-legionowo-piaski-03": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "centrum-komunikacyjne-01": "side of the road cannot be told",
+  "tunel-03": "side of the road cannot be told",
+  "os-bukowiec-01": "side of the road cannot be told",
+  "tunel-01": "side of the road contradicts the direction of travel",
+  "centrum-komunikacyjne-02": "side of the road cannot be told",
+  "pkp-legionowo-piaski-04": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "pkp-legionowo-piaski-02": "side of the road cannot be told",
+  "szczygla-02": "side of the road cannot be told",
+  "sosnowa-02": "side of the road cannot be told",
+  "ch-blekitne-centrum-02": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "sloneczna-01": "side of the road cannot be told",
+  "os-bukowiec-03": "side of the road contradicts the direction of travel",
+  "sloneczna-03": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "ch-blekitne-centrum-01": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "lwowska-01": "side of the road cannot be told",
+  "siwinskiego-01": "side of the road cannot be told",
+  "sobieskiego-01": "side of the road cannot be told",
+  "metro-mlociny-25": "no OpenStreetMap stop with this name and number next to its neighbours",
+  "sobieskiego-04": "side of the road cannot be told",
+  "lwowska-02": "side of the road cannot be told"
+ }
+}
