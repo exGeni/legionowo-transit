@@ -1,26 +1,26 @@
 {
- "checkedAt": "2026-11-28T07:57:52.787Z",
+ "checkedAt": "2026-11-28T20:14:36.912Z",
  "verifiedAt": "2026-11-27T10:01:05.765Z",
  "lines": {
   "D1": {
    "state": "ok",
-   "lastCompared": "2026-11-28T07:57:52.787Z"
+   "lastCompared": "2026-11-28T20:14:36.912Z"
   },
   "D2": {
    "state": "ok",
-   "lastCompared": "2026-11-28T07:57:52.787Z"
+   "lastCompared": "2026-11-28T20:14:36.912Z"
   },
   "D3": {
    "state": "ok",
-   "lastCompared": "2026-11-28T07:57:52.787Z"
+   "lastCompared": "2026-11-28T20:14:36.912Z"
   },
   "D4": {
    "state": "ok",
-   "lastCompared": "2026-11-28T07:57:52.787Z"
+   "lastCompared": "2026-11-28T20:14:36.912Z"
   },
   "D5E": {
    "state": "ok",
-   "lastCompared": "2026-11-28T07:57:52.787Z"
+   "lastCompared": "2026-11-28T20:14:36.912Z"
   }
  }
 }
